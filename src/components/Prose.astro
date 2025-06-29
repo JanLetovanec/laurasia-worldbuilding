@@ -1,7 +1,45 @@
 ---
-
+import "../styles/global.css";
 ---
+<style>
+  .prose {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+
+    padding-block: 10px;
+    padding-inline: 50px;
+
+    background-color: var(--bg-all);
+  }
+
+  .content {
+    max-width: 900px;
+    min-width: 350px;
+    flex: 1 1;
+    padding: 20px;
+
+    background-color: var(--bg-text);
+    box-shadow: 0 0 20px var(--shadow);
+  }
+
+  .content :global(blockquote) {
+    border-left: 5px solid var(--border-highlight);
+    background-color: var(--bg-highlight);
+    box-shadow: 5px 5px 10px -2px var(--shadow);
+
+    margin-right: 50px;
+    padding-block: 1px 3px;
+  }
+
+  .content>p{
+    background-color: darkviolet;
+  }
+</style>
 
 <div class="prose">
-  <slot />
+  <div class="content">
+    <slot />
+  </div>
 </div>
