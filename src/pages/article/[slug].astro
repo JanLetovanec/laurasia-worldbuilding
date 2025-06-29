@@ -5,19 +5,19 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Prose from "../../components/Prose.astro";
 
 export const getStaticPaths = (async () => {
-  const organisations = await getCollection("organisations");
+  const article = await getCollection("articles");
 
-  return organisations.map((organisation) => ({
-    params: { slug: organisation.data.slug },
-    props: { organisation },
+  return article.map((article) => ({
+    params: { slug: article.data.slug },
+    props: { article },
   }));
 }) satisfies GetStaticPaths;
 
-const { organisation } = Astro.props;
-const { Content } = await render(organisation);
+const { article } = Astro.props;
+const { Content } = await render(article);
 ---
 
-<BaseLayout title={organisation.data.title}>
+<BaseLayout title={article.data.title}>
   <Prose>
     <Content />
   </Prose>
