@@ -10,7 +10,7 @@ slug: dead-mans-cape
 
 There is a lot of competing lore and superstition about the true nature of Dead man's cape. There are some who doubt it even exists. No surprise for an order veiled in secrecy, sacrifice and heroism.
 
-While they have no known leadership or headquarters, many believe they come from [[Galicia|Republic of Galicia]], though there are supposed sightings all over the Western continent.
+While they have no known leadership or headquarters, many believe they come from [Galicia](/region/republic-of-galicia), though there are supposed sightings all over the Western continent.
 
 They help the common people with little to no regard to authorities or law. Thus they earned many names and favours, both good and bad.
 
