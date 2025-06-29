@@ -1,5 +1,21 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const organisations = await getCollection("organisations");
 ---
 
-<BaseLayout title="Homepage"> Astro </BaseLayout>
+<BaseLayout title="Homepage">
+  <h1>Astro</h1>
+  <ul>
+    {
+      organisations.map((organisation) => (
+        <li>
+          <a href={`/organisation/${organisation.data.slug}`}>
+            {organisation.data.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>
