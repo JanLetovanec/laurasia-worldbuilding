@@ -12,4 +12,15 @@ const organisations = defineCollection({
   }),
 });
 
-export const collections = { organisations };
+const regions = defineCollection({
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "./src/content/region",
+  }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+  }),
+});
+
+export const collections = { organisations, regions };
