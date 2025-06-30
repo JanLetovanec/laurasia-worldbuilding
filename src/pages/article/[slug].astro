@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Prose from "../../components/Prose.astro";
+import TableOfContents from "../../components/TableOfContents/TableOfContents.astro";
 
 export const getStaticPaths = (async () => {
   const article = await getCollection("articles");
@@ -14,10 +15,11 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { article } = Astro.props;
-const { Content } = await render(article);
+const { Content, headings } = await render(article);
 ---
 
 <BaseLayout title={article.data.title}>
+  <TableOfContents headings={headings} />
   <Prose>
     <Content />
   </Prose>
