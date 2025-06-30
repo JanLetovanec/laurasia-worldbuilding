@@ -9,7 +9,7 @@ const articles = defineCollection({
   schema: z.object({
     title: z.string(),
     slug: z.string(),
-  })
-})
+  }),
+});
 
 export const collections = { articles };
