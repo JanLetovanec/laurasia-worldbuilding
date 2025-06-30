@@ -9,6 +9,6 @@ import remarkToc from "remark-toc";
 export default defineConfig({
   integrations: [react(), mdx()],
   markdown: {
-    remarkPlugins: [[remarkToc, {heading: 'contents', maxDepth: 3}]]
+    remarkPlugins: [[remarkToc, {heading: 'contents', maxDepth: 4}]]
   }
 });
