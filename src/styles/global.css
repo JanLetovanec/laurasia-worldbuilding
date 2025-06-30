@@ -4,7 +4,6 @@ blockquote p {
     margin-block: 0;
 }
 
-
 blockquote p::before {
     content: '';
 }
@@ -13,14 +12,9 @@ blockquote p::after {
     content: '';
 }
 
-blockquote p strong::before {
-    content: '"';
+body {
+    min-height: 100vh;
 }
-
-blockquote p strong::after {
-    content: '"';
-}
-
 
 :root {
     --bg-all: #7A692FFF;
@@ -29,5 +23,7 @@ blockquote p strong::after {
     --bg-highlight: #FFFFFF;
 
     --shadow: #000000;
+
+    font-family: Verdana, sans-serif;
 }
 
