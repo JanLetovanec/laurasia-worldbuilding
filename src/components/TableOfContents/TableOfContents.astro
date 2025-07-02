@@ -12,6 +12,15 @@ const { headings } = Astro.props;
 const toc = buildTableOfContents(headings);
 ---
 <style>
+  @media (max-width: 850px) {
+    nav.toc {
+      position: static;
+      max-width: 100%;
+      border-right: 3px solid var(--border-highlight);;
+      margin: 10px;
+    }
+  }
+
   .toc {
     position: sticky;
     top: 50px;

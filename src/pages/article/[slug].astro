@@ -19,6 +19,12 @@ const { Content, headings } = await render(article);
 ---
 
 <style>
+  @media (max-width: 850px) {
+    .wrapper .reading-pane {
+      flex-direction: column;
+    }
+  }
+
   .wrapper {
     width: 100%;
     max-width: 100%;
