@@ -2,30 +2,6 @@
 import "../styles/global.css";
 ---
 <style>
-  .prose {
-    width: 100%;
-    max-width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-
-    padding-block: 10px;
-    padding-inline: 50px;
-
-    background-color: var(--bg-all);
-  }
-
-  .content {
-    max-width: 900px;
-    min-width: 350px;
-    flex: 1 1;
-    padding: 20px;
-
-    background-color: var(--bg-text);
-    box-shadow: 0 0 20px var(--shadow);
-  }
-
   .content :global(blockquote) {
     border-left: 5px solid var(--border-highlight);
     background-color: var(--bg-highlight);
@@ -45,8 +21,6 @@ import "../styles/global.css";
 
 </style>
 
-<div class="prose">
-  <div class="content">
+<div class="content">
     <slot />
-  </div>
 </div>
