@@ -19,8 +19,8 @@ body {
 :root {
     --bg-all: #7A692FFF;
     --bg-text: #F6DF7AFF;
-    --border-highlight: #9d2828;
     --bg-highlight: #FFFFFF;
+    --border-highlight: #9d2828;
 
     --shadow: #000000;
 

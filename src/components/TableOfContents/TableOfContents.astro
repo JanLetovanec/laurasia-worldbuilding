@@ -11,6 +11,28 @@ const { headings } = Astro.props;
 
 const toc = buildTableOfContents(headings);
 ---
+<style>
+  .toc {
+    position: sticky;
+    top: 50px;
+    right: 0;
+
+
+    max-width: 300px;
+    margin-top: 120px;
+    padding-right: 10px;
+
+    background-color: var(--bg-text);
+    border: 3px solid var(--border-highlight);
+    border-right: 0;
+  }
+
+  .toc :global(li) {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>
 
 <nav class="toc">
   <ul>

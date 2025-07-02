@@ -18,9 +18,51 @@ const { article } = Astro.props;
 const { Content, headings } = await render(article);
 ---
 
+<style>
+  .wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-block: 10px;
+    padding-inline: 50px;
+
+    background-color: var(--bg-all);
+  }
+
+  .reading-pane {
+    position: relative;
+
+    max-width: 900px;
+    min-width: 350px;
+    flex: 1 1;
+
+    background-color: var(--bg-text);
+    box-shadow: 0 0 20px var(--shadow);
+
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+  }
+
+  .article {
+    flex: 1 0 0;
+    padding: 20px;
+  }
+</style>
+
 <BaseLayout title={article.data.title}>
-  <TableOfContents headings={headings} />
-  <Prose>
-    <Content />
-  </Prose>
+  <main class="wrapper">
+    <div class="reading-pane">
+      <TableOfContents headings={headings} />
+      <div class="article">
+        <Prose>
+          <Content />
+        </Prose>
+      </div>
+    </div>
+  </main>
 </BaseLayout>
