@@ -16,12 +16,21 @@ const getFirstPreviousHeading = (element: Element | null) => {
   return element;
 }
 
+const updateClasses = (tocLinks: Element[], oldElement: Element | null, newId: string, classToAdd: string): Element | null => {
+  oldElement?.classList.remove(classToAdd);
+
+  const hrefString = "#" + newId;
+  const relevantElement = tocLinks.find(elem => elem.getAttribute("href") === hrefString);
+  relevantElement?.classList.add(classToAdd);
+  return relevantElement ?? null;
+}
+
 export const test = () => {
-  console.log("Whoah");
   const visibleSet = new Set<Element>();
-  const observedElements = document
-    .querySelector<HTMLElement>(".content")
-    ?.querySelectorAll("*");
+  const observedElements = document.querySelectorAll<HTMLElement>(".content *");
+
+  const tocLinks = [...document.querySelectorAll(".toc li a")];
+  let currentHeader: Element | null = null;
 
   const callback = (entries: IntersectionObserverEntry[]) => {
     // Update the visible set
@@ -34,7 +43,9 @@ export const test = () => {
     // Get the top-most element
     const topVisibleElement = getTopMostElement(visibleSet);
     const relevantHeading = getFirstPreviousHeading(topVisibleElement);
-    relevantHeading?.classList.add("hek");
+    if (("#" + relevantHeading?.id) !== currentHeader?.getAttribute("href")) {
+      currentHeader = updateClasses(tocLinks, currentHeader, relevantHeading?.id ?? "", "active-header")
+    }
 
   }
 

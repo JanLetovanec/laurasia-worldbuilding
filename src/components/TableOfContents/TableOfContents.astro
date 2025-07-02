@@ -41,6 +41,11 @@ const toc = buildTableOfContents(headings);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .toc :global(a.active-header) {
+    border-left: 3px solid var(--border-highlight);
+    background-color: var(--bg-highlight);
+  }
 </style>
 
 <nav class="toc">
@@ -48,3 +53,9 @@ const toc = buildTableOfContents(headings);
     {toc.map((heading) => <ContentsHeading {...heading} />)}
   </ul>
 </nav>
+
+<script>
+  import { test } from "../../utils/visibility-utils";
+
+  test();
+</script>
