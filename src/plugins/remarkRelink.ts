@@ -1,4 +1,4 @@
-import { visit, type Visitor} from "unist-util-visit";
+import { CONTINUE, visit, type Visitor } from "unist-util-visit";
 import type { Root, Node , Text, Parent} from "mdast";
 
 const isText = (node: Node) : node is Text => {
@@ -23,7 +23,18 @@ const visitAndRelink : Visitor = (
     return;
   }
 
-  // 2. If you do not contain `[[foo]]`, bail
+  const content = visitee.value;
+  const leftIdx = content.indexOf("[[");
+
+  if (leftIdx === -1) {
+    return CONTINUE;
+  }
+
+  const rightIdx = content.indexOf("]]", leftIdx);
+  if (rightIdx === -1) {
+    return CONTINUE;
+  }
+
   // 3. Otherwise "map" the node to "previous stuff" [foo](foo) "next stuff"
 }
 
