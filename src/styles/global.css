@@ -20,7 +20,10 @@ body {
     --bg-all: #7A692FFF;
     --bg-text: #F6DF7AFF;
     --bg-highlight: #FFFFFF;
+    --bg-popoup: #841111;
     --border-highlight: #9d2828;
+
+    --fg-inverted: #FFFFFF;
 
     --shadow: #000000;
 
