@@ -1,0 +1,20 @@
+---
+import type { MarkdownHeadingWithSubheadings } from "../../utils/table-of-contents";
+
+type Props = MarkdownHeadingWithSubheadings;
+
+const { text, slug, subheadings } = Astro.props;
+---
+
+<li>
+  <a href={`#${slug}`}>{text}</a>
+  {
+    subheadings.length > 0 && (
+      <ul>
+        {subheadings.map((heading) => (
+          <Astro.self {...heading} />
+        ))}
+      </ul>
+    )
+  }
+</li>

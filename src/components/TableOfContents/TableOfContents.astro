@@ -1,0 +1,63 @@
+---
+import type { MarkdownHeading } from "astro";
+import { buildTableOfContents } from "../../utils/table-of-contents";
+import ContentsHeading from "./ContentsHeading.astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  className?: string;
+}
+
+const { headings, className } = Astro.props;
+
+const toc = buildTableOfContents(headings);
+const actualClassName = className ?? "";
+---
+<style>
+  @media (width <= 850px) {
+    nav.toc {
+      position: static;
+      max-width: 100%;
+      border-right: 3px solid var(--border-highlight);;
+      margin: 10px;
+    }
+  }
+
+  .toc {
+    position: sticky;
+    top: 50px;
+    right: 0;
+
+
+    max-width: 300px;
+    margin-top: 120px;
+    padding-right: 10px;
+
+    background-color: var(--bg-text);
+    border: 3px solid var(--border-highlight);
+    border-right: 0;
+  }
+
+  .toc :global(li) {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .toc :global(a.active-header) {
+    border-left: 3px solid var(--border-highlight);
+    background-color: var(--bg-highlight);
+  }
+</style>
+
+<nav class={"toc " + actualClassName}>
+  <ul>
+    {toc.map((heading) => <ContentsHeading {...heading} />)}
+  </ul>
+</nav>
+
+<script>
+  import { test } from "../../utils/visibility-utils";
+
+  test();
+</script>

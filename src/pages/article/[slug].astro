@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Prose from "../../components/Prose.astro";
+import TableOfContents from "../../components/TableOfContents/TableOfContents.astro";
 
 export const getStaticPaths = (async () => {
   const article = await getCollection("articles");
@@ -14,11 +15,75 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { article } = Astro.props;
-const { Content } = await render(article);
+const { Content, headings } = await render(article);
 ---
 
+<style>
+  @media (width > 850px) {
+    :global(.hideBig) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    :global(.hideSmall) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    :global(.hideSmall) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    main.wrapper {
+      padding-right: 50px;
+    }
+  }
+
+  .wrapper {
+    position: relative;
+
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+
+    padding-block: 10px;
+    padding-inline: 50px 0;
+
+    background-color: var(--bg-all);
+  }
+
+  .reading-pane {
+    position: relative;
+
+    max-width: 900px;
+    min-width: 350px;
+    flex: 1 1;
+
+    background-color: var(--bg-text);
+    box-shadow: 0 0 20px var(--shadow);
+
+    align-items: flex-start;
+    padding: 20px;
+  }
+</style>
+
 <BaseLayout title={article.data.title}>
-  <Prose>
-    <Content />
-  </Prose>
+  <main class="wrapper">
+    <TableOfContents className="hideSmall" headings={headings} />
+    <div class="reading-pane">
+      <TableOfContents className="hideBig" headings={headings} />
+      <Prose>
+        <Content />
+      </Prose>
+    </div>
+  </main>
 </BaseLayout>
