@@ -10,6 +10,6 @@ import remarkRelink from "./src/plugins/remarkRelink.js";
 export default defineConfig({
   integrations: [react(), mdx()],
   markdown: {
-    remarkPlugins: [[remarkToc, {heading: 'contents', maxDepth: 4}], remarkRelink]
+    remarkPlugins: [[remarkToc, {heading: 'contents', maxDepth: 4}], remarkRelink,]
   }
 });

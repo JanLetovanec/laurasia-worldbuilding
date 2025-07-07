@@ -15,6 +15,23 @@ const isParent = (node: Node | undefined) : node is Parent => {
   return maybeParent.children !== undefined;
 }
 
+const toSlug = (name: string): string => {
+  return name.toLowerCase().replaceAll(' ', '-');
+}
+
+const parseLink = (link: string): [string, string] => {
+  const parts = link.split('|');
+  // In case there is no '|' the link is "simple" [[foo]] -> [foo](foo)
+  if (parts.length < 2) {
+    return [link, link];
+  }
+
+  // Otherwise we're in the case is: [[foo|bar]] -> [foo](bar)
+  const text = parts[0];
+  const urlRaw = (parts.slice(1)).join("|");
+  const url = toSlug(urlRaw)
+  return [text, url];
+}
 
 const visitAndRelink : Visitor = (
   visitee: Node,
@@ -36,8 +53,6 @@ const visitAndRelink : Visitor = (
     return CONTINUE;
   }
 
-
-
   // Left part is all before the [[foo]]
   const leftPart = content.slice(0, leftIdx);
   visitee.value = leftPart;
@@ -45,8 +60,9 @@ const visitAndRelink : Visitor = (
 
   // Middle bit is a link element, the `foo` in [[foo]]
   const middle = content.slice(leftIdx + 2, rightIdx);
-  const middleNode = u('link', {url: middle}, [
-    u('text', middle),
+  const [text, url] = parseLink(middle);
+  const middleNode = u('link', {url: url}, [
+    u('text', text),
   ]);
 
   // Right bit is just the rest (after the [[foo]])
