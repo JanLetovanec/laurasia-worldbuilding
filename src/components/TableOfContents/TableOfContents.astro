@@ -5,14 +5,16 @@ import ContentsHeading from "./ContentsHeading.astro";
 
 interface Props {
   headings: MarkdownHeading[];
+  className?: string;
 }
 
-const { headings } = Astro.props;
+const { headings, className } = Astro.props;
 
 const toc = buildTableOfContents(headings);
+const actualClassName = className ?? "";
 ---
 <style>
-  @media (max-width: 850px) {
+  @media (width <= 850px) {
     nav.toc {
       position: static;
       max-width: 100%;
@@ -48,7 +50,7 @@ const toc = buildTableOfContents(headings);
   }
 </style>
 
-<nav class="toc">
+<nav class={"toc " + actualClassName}>
   <ul>
     {toc.map((heading) => <ContentsHeading {...heading} />)}
   </ul>

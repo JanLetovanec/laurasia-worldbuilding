@@ -19,22 +19,44 @@ const { Content, headings } = await render(article);
 ---
 
 <style>
-  @media (max-width: 850px) {
-    .wrapper .reading-pane {
-      flex-direction: column;
+  @media (width > 850px) {
+    :global(.hideBig) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    :global(.hideSmall) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    :global(.hideSmall) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    main.wrapper {
+      padding-right: 50px;
     }
   }
 
   .wrapper {
+    position: relative;
+
     width: 100%;
     max-width: 100%;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: row-reverse;
+    justify-content: space-between;
     align-items: flex-start;
+    gap: 30px;
 
     padding-block: 10px;
-    padding-inline: 50px;
+    padding-inline: 50px 0;
 
     background-color: var(--bg-all);
   }
@@ -49,26 +71,19 @@ const { Content, headings } = await render(article);
     background-color: var(--bg-text);
     box-shadow: 0 0 20px var(--shadow);
 
-    display: flex;
-    flex-direction: row-reverse;
     align-items: flex-start;
-  }
-
-  .article {
-    flex: 1 0 0;
     padding: 20px;
   }
 </style>
 
 <BaseLayout title={article.data.title}>
   <main class="wrapper">
+    <TableOfContents className="hideSmall" headings={headings} />
     <div class="reading-pane">
-      <TableOfContents headings={headings} />
-      <div class="article">
-        <Prose>
-          <Content />
-        </Prose>
-      </div>
+      <TableOfContents className="hideBig" headings={headings} />
+      <Prose>
+        <Content />
+      </Prose>
     </div>
   </main>
 </BaseLayout>
