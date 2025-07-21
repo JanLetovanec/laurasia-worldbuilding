@@ -1,22 +1,99 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import TableOfContents from "../components/TableOfContents/TableOfContents.astro";
+import Prose from "../components/Prose.astro";
 
 const articles = await getCollection("articles");
 ---
+<style>
+  @media (width > 850px) {
+    :global(.hideBig) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    :global(.hideSmall) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    :global(.hideSmall) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    main.wrapper {
+      padding-right: 50px;
+    }
+  }
+
+  .wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-block: 10px;
+    padding-inline: 50px;
+
+    background-color: var(--bg-all);
+  }
+
+  .reading-pane {
+    position: relative;
+
+    max-width: 900px;
+    min-width: 350px;
+    flex: 1 1;
+
+    background-color: var(--bg-text);
+    box-shadow: 0 0 20px var(--shadow);
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .title {
+    align-self: stretch;
+    text-align: center;
+    background: var(--bg-popoup);
+    padding: 10px;
+    box-shadow: 1px 1px 3px black;
+    color: var(--fg-inverted);
+  }
+
+</style>
 
 <BaseLayout title="Homepage">
-  <h1>Astro</h1>
-  <h2>Articles</h2>
-  <ul>
-    {
-      articles.map((articles) => (
-        <li>
-          <a href={`/article/${articles.data.slug}`}>
-            {articles.data.title}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
+  <main class="wrapper">
+    <div class="reading-pane">
+      <hgroup class="title">
+        <h1>Laurasia</h1>
+        <p>Let me just copy my notes over here...</p>
+      </hgroup>
+      <section>
+        <h2>Articles</h2>
+        <ul>
+          {
+            articles.map((articles) => (
+              <li>
+                <a href={`/article/${articles.data.slug}`}>
+                  {articles.data.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </main>
 </BaseLayout>
