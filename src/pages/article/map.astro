@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<style>
+  @media (width > 850px) {
+    :global(.hideBig) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    :global(.hideSmall) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    :global(.hideSmall) {
+      display: none;
+    }
+  }
+
+  @media (width <= 850px) {
+    main.wrapper {
+      padding-right: 50px;
+    }
+  }
+
+  .wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-block: 10px;
+    padding-inline: 50px;
+
+    background-color: var(--bg-all);
+  }
+
+  .reading-pane {
+    position: relative;
+
+    max-width: 900px;
+    min-width: 350px;
+    flex: 1 1;
+
+    background-color: var(--bg-text);
+    box-shadow: 0 0 20px var(--shadow);
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .title {
+    align-self: stretch;
+    text-align: center;
+    background: var(--bg-popoup);
+    padding: 10px;
+    box-shadow: 1px 1px 3px black;
+    color: var(--fg-inverted);
+  }
+
+  #map {
+    height: 5000px;
+    width: 800px;
+    max-width: 100%;
+    max-height: 70vh;
+    overflow: clip;
+    border: 2px solid black
+  }
+
+</style>
+
+<BaseLayout title="Ze map">
+  <main class="wrapper">
+    <div class="reading-pane">
+      <hgroup class="title">
+        <h1>Laurasia map</h1>
+        <p>A really cool map</p>
+      </hgroup>
+      <section>
+        <div id="map"></div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import L from 'leaflet';
+  import {toBounds} from '../../utils/map-utils';
+  import Acaadia from './acaadia_olay_asset.svg';
+  import 'leaflet/dist/leaflet.css';
+
+  const map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: -3,
+    maxZoom: 10,
+  });
+
+  const bounds = toBounds([[0,0],[1000,1000]]);
+  const image = L.imageOverlay('/base_map.svg', bounds)
+    .addTo(map);
+
+
+
+  const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svgElement.setAttribute('viewBox', '0 0 1000 1000');
+  svgElement.setAttribute('width', '1000');
+  svgElement.setAttribute('height', '1000');
+  svgElement.innerHTML = "<svg class='wtf'><Acaadia></svg>";
+
+  // const path = document.querySelector('.plz_work')?.shadowRoot.querySelector('path#acaadia');
+  // path?.addEventListener('click', () => {console.log("Omega lol")});
+
+  //
+  //
+  // const accaadia = L.imageOverlay('/acaadia_olay.svg', bounds,
+  //   {opacity: 1, interactive: true});
+  // accaadia.on("click", () => {console.log("Bruh");});
+  // accaadia.addTo(map);
+
+  const accaadia = L.svgOverlay(svgElement, bounds,
+    {opacity: 1, interactive: true});
+  accaadia.on("click", () => {console.log("Bruh");});
+  accaadia.addTo(map);
+
+  map.fitBounds(bounds);
+
+
+</script>
