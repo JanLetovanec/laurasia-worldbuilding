@@ -11,5 +11,7 @@ export default defineConfig({
   integrations: [react(), mdx()],
   markdown: {
     remarkPlugins: [[remarkToc, {heading: 'contents', maxDepth: 4}], remarkRelink,]
-  }
+  },
+  site: 'https://janletovanec.github.io',
+  base: '/laurasia-worldbuilding',
 });
