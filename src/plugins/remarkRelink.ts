@@ -17,7 +17,9 @@ const isParent = (node: Node | undefined) : node is Parent => {
 }
 
 const toSlug = (name: string): string => {
-  return name.toLowerCase().replaceAll(' ', '-');
+  return name.toLowerCase()
+    .replaceAll(' ', '-')
+    .replace(/[^a-z-]/g, '');
 }
 
 const parseLink = (link: string): [string, string] => {
