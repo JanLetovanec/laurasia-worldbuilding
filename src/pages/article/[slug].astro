@@ -74,12 +74,24 @@ const { Content, headings } = await render(article);
     align-items: flex-start;
     padding: 20px;
   }
+
+  .title {
+    align-self: stretch;
+    text-align: center;
+    background: var(--bg-popoup);
+    padding: 10px;
+    box-shadow: 1px 1px 3px black;
+    color: var(--fg-inverted);
+  }
 </style>
 
 <BaseLayout title={article.data.title}>
   <main class="wrapper">
     <TableOfContents className="hideSmall" headings={headings} />
     <div class="reading-pane">
+      <hgroup class="title">
+        <h1>{article.data.title}</h1>
+      </hgroup>
       <TableOfContents className="hideBig" headings={headings} />
       <Prose>
         <Content />
