@@ -1,13 +1,9 @@
 ---
-title: Galician Pantheon
+title: Galician pantheon
 slug: galician-pantheon
 ---
-# Galician Pantheon
-## Contents
-
 # Lord Caro, God of Nobility
-
-Lord Caro, along with his wife, represents the head of Galician pantheon. Galicians believe anyone can be noble, for it is manners that makes a man. Caro was not born noble, he became noble. Nobility is central to Galician’s believe system.
+Lord Caro, along with his wife, represents the head of Galician pantheon. Galicians believe anyone can be noble, for it is manners that makes a man. Caro was not born noble, he became noble. Nobility is central to Galician’s believe system.  
 
 ## Order of Heritage
 While Galicians do not believe in aristocracy, however, they have strong sense of their blood. Your family is sacred, and Lord forbid, should anyone offend it, you will not take that lightly! You will demand satisfaction! Family stays together!
