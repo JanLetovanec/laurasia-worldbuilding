@@ -4,22 +4,32 @@ export interface MarkdownHeadingWithSubheadings extends MarkdownHeading {
   subheadings: MarkdownHeadingWithSubheadings[];
 }
 
+const isParentViable = (heading: MarkdownHeadingWithSubheadings, parent: MarkdownHeadingWithSubheadings | undefined) => {
+  return parent === undefined || parent.depth < heading.depth;
+}
+
 export const buildTableOfContents = (headings: MarkdownHeading[]) => {
   const contents: MarkdownHeadingWithSubheadings[] = [];
-
-  const topLevel = Math.min(...headings.map((heading) => heading.depth));
-
-  const parentHeadings = new Map<number, MarkdownHeadingWithSubheadings>();
-
+  const parentStack: MarkdownHeadingWithSubheadings[] = [];
+  
   headings.forEach((h) => {
     const heading = { ...h, subheadings: [] };
 
-    parentHeadings.set(heading.depth, heading);
+    // Find the next eligible parent
+    let parentCandidate = parentStack.pop();
+    while (!isParentViable(heading, parentCandidate) ) {
+      parentCandidate = parentStack.pop();
+    }
 
-    if (heading.depth === topLevel) {
+    // If the parent exists, assign its subheadings
+    if (parentCandidate !== undefined) {
+      parentCandidate.subheadings.push(heading);
+      parentStack.push(parentCandidate);
+      parentStack.push(heading);
+    }
+    else {
+      parentStack.push(heading);
       contents.push(heading);
-    } else {
-      parentHeadings.get(heading.depth - 1)!.subheadings.push(heading);
     }
   });
 
