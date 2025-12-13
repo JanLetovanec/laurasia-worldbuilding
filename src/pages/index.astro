@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import TableOfContents from "../components/TableOfContents/TableOfContents.astro";
 import Prose from "../components/Prose.astro";
+import { BASE_URL } from "../../constants";
 
 const articles = await getCollection("articles");
 ---
@@ -86,7 +87,7 @@ const articles = await getCollection("articles");
           {
             articles.map((articles) => (
               <li>
-                <a href={`/article/${articles.data.slug}`}>
+                <a href={`${BASE_URL}/article/${articles.data.slug}`}>
                   {articles.data.title}
                 </a>
               </li>

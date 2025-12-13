@@ -179,4 +179,4 @@ Lawful good, Symbol is a golden or brass owl.
 ---
 
 # See also:
-* [Republic of Galicia](https://github.com/JanLetovanec/laurasia-worldbuilding/wiki/Republic-of-Galicia) - Wealth, intrigue and politics - the cornerstones of Galicia
+* [[Republic of Galicia]] - Wealth, intrigue and politics - the cornerstones of Galicia

@@ -5,6 +5,7 @@ import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import remarkToc from "remark-toc";
 import remarkRelink from "./src/plugins/remarkRelink.js";
+import { BASE_URL } from "./constants.js";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,5 +14,5 @@ export default defineConfig({
     remarkPlugins: [[remarkToc, {heading: 'contents', maxDepth: 4}], remarkRelink,]
   },
   site: 'https://janletovanec.github.io',
-  base: '/laurasia-worldbuilding',
+  base: BASE_URL,
 });

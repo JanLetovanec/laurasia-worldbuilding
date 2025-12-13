@@ -1,6 +1,7 @@
 import { CONTINUE, visit, type Visitor } from "unist-util-visit";
 import type { Root, Node, Text, Parent, RootContent } from "mdast";
 import { u } from "unist-builder";
+import { BASE_URL } from "../../constants.ts";
 
 const isText = (node: Node) : node is Text => {
   return node.type == 'text';
@@ -16,21 +17,24 @@ const isParent = (node: Node | undefined) : node is Parent => {
 }
 
 const toSlug = (name: string): string => {
-  return name.toLowerCase().replaceAll(' ', '-');
+  return name.toLowerCase()
+    .replaceAll(' ', '-')
+    .replace(/[^a-z-]/g, '');
 }
 
 const parseLink = (link: string): [string, string] => {
   const parts = link.split('|');
-  // In case there is no '|' the link is "simple" [[foo]] -> [foo](foo)
+  // In case there is no '|' the link is "simple" [[foo]] -> [foo](BASE/article/foo)
   if (parts.length < 2) {
-    return [link, link];
+    const slug = toSlug(link);
+    return [link, `${BASE_URL}/article/${slug}`];
   }
 
-  // Otherwise we're in the case is: [[foo|bar]] -> [foo](bar)
+  // Otherwise we're in the case is: [[foo|bar]] -> [foo](BASE/article/bar)
   const text = parts[0];
   const urlRaw = (parts.slice(1)).join("|");
   const url = toSlug(urlRaw)
-  return [text, url];
+  return [text, `${BASE_URL}/article/${url}`];
 }
 
 const visitAndRelink : Visitor = (
