@@ -1,6 +1,7 @@
 # laurasia-worldbuilding
 Lore and other stuff that I want to keep somewhere
 See [wiki](https://github.com/JanLetovanec/laurasia-worldbuilding/wiki)
+See [actually hosted page](https://janletovanec.github.io/laurasia-worldbuilding/)
 
 ## 🚀 Project Structure
 
