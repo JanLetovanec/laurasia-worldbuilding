@@ -1,4 +1,4 @@
-import { type PropsWithChildren, useCallback, useRef, useState } from "react";
+import { type PropsWithChildren, useRef } from "react";
 import useGrab from "../../utils/useGrab.ts";
 import css from "./Map.module.css";
 import clsx from "clsx";
@@ -10,17 +10,9 @@ interface MapProps extends PropsWithChildren {
 export default function Map({ children, className }: MapProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [translateX, setTranslateX] = useState<number>(0);
-  const [translateY, setTranslateY] = useState<number>(0);
+  const { isGrabbing, translateX, translateY } = useGrab(ref);
 
-  const onGrabEnd = useCallback((offsetX: number, offsetY: number) => {
-    setTranslateX((x) => x + offsetX);
-    setTranslateY((y) => y + offsetY);
-  }, []);
-
-  const { isGrabbing, offsetX, offsetY } = useGrab(ref, onGrabEnd);
-
-  const transform = `translateX(${translateX + offsetX}px) translateY(${translateY + offsetY}px)`;
+  const transform = `translateX(${translateX}px) translateY(${translateY}px)`;
   const cursor = isGrabbing ? "grabbing" : "grab";
 
   return (

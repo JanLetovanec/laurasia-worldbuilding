@@ -20,18 +20,23 @@ const getGrabPositionFromEvent = (
   return null;
 };
 
-export default function useGrab(
-  container: RefObject<HTMLElement | null>,
-  onGrabEnd: (offsetX: number, offsetY: number) => void,
-) {
+export default function useGrab(container: RefObject<HTMLElement | null>) {
   const [isGrabbing, setGrabbing] = useState<boolean>(false);
   const [initialGrabX, setInitialGrabX] = useState<number>(0);
   const [initialGrabY, setInitialGrabY] = useState<number>(0);
   const [currentGrabX, setCurrentGrabX] = useState<number>(0);
   const [currentGrabY, setCurrentGrabY] = useState<number>(0);
 
+  const [translateX, setTranslateX] = useState<number>(0);
+  const [translateY, setTranslateY] = useState<number>(0);
+
   const offsetX = currentGrabX - initialGrabX;
   const offsetY = currentGrabY - initialGrabY;
+
+  const onGrabEnd = useCallback((offsetX: number, offsetY: number) => {
+    setTranslateX((x) => x + offsetX);
+    setTranslateY((y) => y + offsetY);
+  }, []);
 
   const handleGrabStart = useCallback((event: MouseEvent | TouchEvent) => {
     if (!container.current) {
@@ -72,7 +77,7 @@ export default function useGrab(
 
       onGrabEnd(offsetX, offsetY);
     },
-    [initialGrabX, initialGrabY, currentGrabX, currentGrabY],
+    [initialGrabX, initialGrabY, currentGrabX, currentGrabY, onGrabEnd],
   );
 
   const handleGrabMove = useCallback(
@@ -138,9 +143,9 @@ export default function useGrab(
   return useMemo(
     () => ({
       isGrabbing,
-      offsetX,
-      offsetY,
+      translateX: translateX + offsetX,
+      translateY: translateY + offsetY,
     }),
-    [isGrabbing, offsetX, offsetY],
+    [isGrabbing, translateX, translateY, offsetX, offsetY],
   );
 }
