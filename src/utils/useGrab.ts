@@ -20,7 +20,10 @@ const getGrabPositionFromEvent = (
   return null;
 };
 
-export default function useGrab(container: RefObject<HTMLElement | null>) {
+export default function useGrab(
+  container: RefObject<HTMLElement | null>,
+  minScale: number = 1,
+) {
   const [isGrabbing, setGrabbing] = useState<boolean>(false);
   const [initialGrabX, setInitialGrabX] = useState<number>(0);
   const [initialGrabY, setInitialGrabY] = useState<number>(0);
@@ -29,6 +32,7 @@ export default function useGrab(container: RefObject<HTMLElement | null>) {
 
   const [translateX, setTranslateX] = useState<number>(0);
   const [translateY, setTranslateY] = useState<number>(0);
+  const [scale, setScale] = useState<number>(1);
 
   const offsetX = currentGrabX - initialGrabX;
   const offsetY = currentGrabY - initialGrabY;
@@ -37,6 +41,30 @@ export default function useGrab(container: RefObject<HTMLElement | null>) {
     setTranslateX((x) => x + offsetX);
     setTranslateY((y) => y + offsetY);
   }, []);
+
+  const handleScroll = useCallback(
+    (event: WheelEvent) => {
+      event.preventDefault();
+
+      if (!container.current) {
+        return;
+      }
+
+      const oldScale = scale;
+      const newScale = Math.max(
+        scale - event.deltaY / document.body.clientHeight,
+        minScale,
+      );
+
+      if (newScale === oldScale) {
+        return;
+      }
+
+      setScale(newScale);
+      // TODO: When we scale, we should also translate to ensure that whatever we are mousing over stays in the same place when we scroll
+    },
+    [scale, minScale],
+  );
 
   const handleGrabStart = useCallback((event: MouseEvent | TouchEvent) => {
     if (!container.current) {
@@ -107,6 +135,7 @@ export default function useGrab(container: RefObject<HTMLElement | null>) {
   );
 
   useEffect(() => {
+    container.current?.addEventListener("wheel", handleScroll);
     container.current?.addEventListener("mousedown", handleGrabStart);
     container.current?.addEventListener("touchstart", handleGrabStart);
     document.addEventListener("mouseup", handleGrabStop, {
@@ -126,6 +155,7 @@ export default function useGrab(container: RefObject<HTMLElement | null>) {
     });
 
     return () => {
+      container.current?.removeEventListener("wheel", handleScroll);
       container.current?.removeEventListener("mousedown", handleGrabStart);
       container.current?.removeEventListener("touchstart", handleGrabStart);
       document.removeEventListener("mouseup", handleGrabStop);
@@ -134,7 +164,7 @@ export default function useGrab(container: RefObject<HTMLElement | null>) {
       document.removeEventListener("mousemove", handleGrabMove);
       document.removeEventListener("touchmove", handleGrabMove);
     };
-  }, [handleGrabStart, handleGrabStop, handleGrabMove]);
+  }, [handleScroll, handleGrabStart, handleGrabStop, handleGrabMove]);
 
   useEffect(() => {
     document.body.style.cursor = isGrabbing ? "grabbing" : "default";
@@ -145,7 +175,8 @@ export default function useGrab(container: RefObject<HTMLElement | null>) {
       isGrabbing,
       translateX: translateX + offsetX,
       translateY: translateY + offsetY,
+      scale,
     }),
-    [isGrabbing, translateX, translateY, offsetX, offsetY],
+    [isGrabbing, translateX, translateY, offsetX, offsetY, scale],
   );
 }

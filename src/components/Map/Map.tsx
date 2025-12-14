@@ -10,9 +10,9 @@ interface MapProps extends PropsWithChildren {
 export default function Map({ children, className }: MapProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const { isGrabbing, translateX, translateY } = useGrab(ref);
+  const { isGrabbing, translateX, translateY, scale } = useGrab(ref);
 
-  const transform = `translateX(${translateX}px) translateY(${translateY}px)`;
+  const transform = `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`;
   const cursor = isGrabbing ? "grabbing" : "grab";
 
   return (
