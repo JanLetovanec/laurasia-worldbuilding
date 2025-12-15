@@ -60,10 +60,33 @@ export default function useGrab(
         return;
       }
 
+      const mouseX = event.clientX - container.current.clientLeft;
+      const mouseY = event.clientY - container.current.clientTop;
+
+      const centreX =
+        container.current.clientLeft +
+        container.current.clientWidth / 2 +
+        translateX +
+        offsetX;
+      const centreY =
+        container.current.clientTop +
+        container.current.clientHeight / 2 +
+        translateY +
+        offsetY;
+
+      const scaleFactor = 1 - oldScale / newScale;
+
+      const deltaX = centreX - mouseX;
+      const deltaY = centreY - mouseY;
+
+      const translationOffsetX = deltaX * scaleFactor;
+      const translationOffsetY = deltaY * scaleFactor;
+
       setScale(newScale);
-      // TODO: When we scale, we should also translate to ensure that whatever we are mousing over stays in the same place when we scroll
+      setTranslateX((x) => x + translationOffsetX);
+      setTranslateY((y) => y + translationOffsetY);
     },
-    [scale, minScale],
+    [scale, minScale, translateX, translateY, offsetX, offsetY],
   );
 
   const handleGrabStart = useCallback((event: MouseEvent | TouchEvent) => {
