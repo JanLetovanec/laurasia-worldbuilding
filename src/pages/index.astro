@@ -4,9 +4,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import TableOfContents from "../components/TableOfContents/TableOfContents.astro";
 import Prose from "../components/Prose.astro";
 import { BASE_URL } from "../../constants";
+import WorldMap from "../components/WorldMap.astro";
 
 const articles = await getCollection("articles");
 ---
+
 <style>
   @media (width > 850px) {
     :global(.hideBig) {
@@ -71,7 +73,6 @@ const articles = await getCollection("articles");
     box-shadow: 1px 1px 3px black;
     color: var(--fg-inverted);
   }
-
 </style>
 
 <BaseLayout title="Homepage">
@@ -81,6 +82,7 @@ const articles = await getCollection("articles");
         <h1>Laurasia</h1>
         <p>Let me just copy my notes over here...</p>
       </hgroup>
+      <WorldMap />
       <section>
         <h2>Articles</h2>
         <ul>
