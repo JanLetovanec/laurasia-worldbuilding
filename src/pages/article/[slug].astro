@@ -51,7 +51,6 @@ const { Content, headings } = await render(article);
     min-height: 100vh;
     display: flex;
     flex-direction: row-reverse;
-    justify-content: space-between;
     align-items: flex-start;
     gap: 30px;
 
@@ -59,6 +58,12 @@ const { Content, headings } = await render(article);
     padding-inline: 50px 0;
 
     background-color: var(--bg-all);
+  }
+
+  .centering-div {
+    flex: 1;
+    display: flex;
+    justify-content: center;
   }
 
   .reading-pane {
@@ -88,14 +93,17 @@ const { Content, headings } = await render(article);
 <BaseLayout title={article.data.title}>
   <main class="wrapper">
     <TableOfContents className="hideSmall" headings={headings} />
-    <div class="reading-pane">
-      <hgroup class="title">
-        <h1>{article.data.title}</h1>
-      </hgroup>
-      <TableOfContents className="hideBig" headings={headings} />
-      <Prose>
-        <Content />
-      </Prose>
+    <div class="centering-div">
+      <div class="reading-pane">
+        <hgroup class="title">
+          <h1>{article.data.title}</h1>
+        </hgroup>
+        <TableOfContents className="hideBig" headings={headings} />
+        <Prose>
+          <Content />
+        </Prose>
+      </div>
     </div>
+
   </main>
 </BaseLayout>
