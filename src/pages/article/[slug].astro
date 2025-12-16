@@ -41,6 +41,10 @@ const { Content, headings } = await render(article);
     main.wrapper {
       padding: 0;
     }
+
+    div.centering-div {
+        justify-content: flex-start;
+    }
   }
 
   .wrapper {
@@ -64,6 +68,8 @@ const { Content, headings } = await render(article);
     flex: 1;
     display: flex;
     justify-content: center;
+
+    max-width: 100%;
   }
 
   .reading-pane {
@@ -76,7 +82,6 @@ const { Content, headings } = await render(article);
     background-color: var(--bg-text);
     box-shadow: 0 0 20px var(--shadow);
 
-    align-items: flex-start;
     padding: 20px;
   }
 
