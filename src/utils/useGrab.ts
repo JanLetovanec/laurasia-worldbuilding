@@ -1,10 +1,5 @@
-import {
-  type RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { type RefObject, useCallback, useEffect, useMemo } from "react";
+import { useImmer } from "use-immer";
 
 const getGrabPositionFromEvent = (
   event: MouseEvent | TouchEvent,
@@ -20,73 +15,105 @@ const getGrabPositionFromEvent = (
   return null;
 };
 
+interface GrabState {
+  isGrabbing: boolean;
+  initialGrabX: number;
+  initialGrabY: number;
+  currentGrabX: number;
+  currentGrabY: number;
+  translateX: number;
+  translateY: number;
+  scale: number;
+}
+
+const DEFAULT_STATE: GrabState = {
+  isGrabbing: false,
+  initialGrabX: 0,
+  initialGrabY: 0,
+  currentGrabX: 0,
+  currentGrabY: 0,
+  translateX: 0,
+  translateY: 0,
+  scale: 1,
+};
+
 export default function useGrab(
   container: RefObject<HTMLElement | null>,
   minScale: number = 1,
 ) {
-  const [isGrabbing, setGrabbing] = useState<boolean>(false);
-  const [initialGrabX, setInitialGrabX] = useState<number>(0);
-  const [initialGrabY, setInitialGrabY] = useState<number>(0);
-  const [currentGrabX, setCurrentGrabX] = useState<number>(0);
-  const [currentGrabY, setCurrentGrabY] = useState<number>(0);
-
-  const [translateX, setTranslateX] = useState<number>(0);
-  const [translateY, setTranslateY] = useState<number>(0);
-  const [scale, setScale] = useState<number>(1);
+  const [
+    {
+      isGrabbing,
+      initialGrabX,
+      initialGrabY,
+      currentGrabX,
+      currentGrabY,
+      translateX,
+      translateY,
+      scale,
+    },
+    setState,
+  ] = useImmer<GrabState>(DEFAULT_STATE);
 
   const offsetX = currentGrabX - initialGrabX;
   const offsetY = currentGrabY - initialGrabY;
 
   const onGrabEnd = useCallback((offsetX: number, offsetY: number) => {
-    setTranslateX((x) => x + offsetX);
-    setTranslateY((y) => y + offsetY);
+    setState((draft) => {
+      draft.translateX += offsetX;
+      draft.translateY += offsetY;
+    });
   }, []);
 
   const handleScroll = useCallback(
     (event: WheelEvent) => {
       event.preventDefault();
 
-      if (!container.current) {
-        return;
-      }
+      setState((draft) => {
+        if (!container.current) {
+          return;
+        }
 
-      const oldScale = scale;
-      const newScale = Math.max(
-        scale - event.deltaY / document.body.clientHeight,
-        minScale,
-      );
+        const oldScale = draft.scale;
+        const newScale = Math.max(
+          draft.scale - event.deltaY / document.body.clientHeight,
+          minScale,
+        );
 
-      if (newScale === oldScale) {
-        return;
-      }
+        if (newScale === oldScale) {
+          return;
+        }
 
-      const mouseX = event.clientX - container.current.clientLeft;
-      const mouseY = event.clientY - container.current.clientTop;
+        const mouseX = event.clientX - container.current.clientLeft;
+        const mouseY = event.clientY - container.current.clientTop;
 
-      const centreX =
-        container.current.clientLeft +
-        container.current.clientWidth / 2 +
-        translateX +
-        offsetX;
-      const centreY =
-        container.current.clientTop +
-        container.current.clientHeight / 2 +
-        translateY +
-        offsetY;
+        const centreX =
+          container.current.clientLeft +
+          container.current.clientWidth / 2 +
+          draft.translateX +
+          draft.currentGrabX -
+          draft.initialGrabX;
+        const centreY =
+          container.current.clientTop +
+          container.current.clientHeight / 2 +
+          draft.translateY +
+          draft.currentGrabY -
+          draft.initialGrabY;
 
-      const scaleFactor = 1 - oldScale / newScale;
+        const scaleFactor = 1 - oldScale / newScale;
 
-      const deltaX = centreX - mouseX;
-      const deltaY = centreY - mouseY;
+        const deltaX = centreX - mouseX;
+        const deltaY = centreY - mouseY;
 
-      const translationOffsetX = deltaX * scaleFactor;
-      const translationOffsetY = deltaY * scaleFactor;
+        const translationOffsetX = deltaX * scaleFactor;
+        const translationOffsetY = deltaY * scaleFactor;
 
-      setScale(newScale);
-      setTranslateX((x) => x + translationOffsetX);
-      setTranslateY((y) => y + translationOffsetY);
+        draft.scale = newScale;
+        draft.translateX += translationOffsetX;
+        draft.translateY += translationOffsetY;
+      });
     },
-    [scale, minScale, translateX, translateY, offsetX, offsetY],
+    [minScale],
   );
 
   const handleGrabStart = useCallback((event: MouseEvent | TouchEvent) => {
@@ -106,38 +133,42 @@ export default function useGrab(
     const x = clientX - container.current?.clientLeft;
     const y = clientY - container.current?.clientTop;
 
-    setInitialGrabX(x);
-    setInitialGrabY(y);
-    setCurrentGrabX(x);
-    setCurrentGrabY(y);
-    setGrabbing(true);
+    setState((draft) => {
+      draft.initialGrabX = x;
+      draft.initialGrabY = y;
+      draft.currentGrabX = x;
+      draft.currentGrabY = y;
+      draft.isGrabbing = true;
+    });
   }, []);
 
   const handleGrabStop = useCallback(
     (_: MouseEvent | TouchEvent) => {
-      setGrabbing(false);
+      setState((draft) => {
+        draft.isGrabbing = false;
 
-      const offsetX = currentGrabX - initialGrabX;
-      const offsetY = currentGrabY - initialGrabY;
+        const offsetX = draft.currentGrabX - draft.initialGrabX;
+        const offsetY = draft.currentGrabY - draft.initialGrabY;
 
-      // Reset the initial and current grab to set offset to 0
-      setInitialGrabX(0);
-      setInitialGrabY(0);
-      setCurrentGrabX(0);
-      setCurrentGrabY(0);
+        // Reset the initial and current grab to set offset to 0
+        draft.initialGrabX = 0;
+        draft.initialGrabY = 0;
+        draft.currentGrabX = 0;
+        draft.currentGrabY = 0;
 
-      onGrabEnd(offsetX, offsetY);
+        onGrabEnd(offsetX, offsetY);
+      });
     },
-    [initialGrabX, initialGrabY, currentGrabX, currentGrabY, onGrabEnd],
+    [onGrabEnd],
   );
 
-  const handleGrabMove = useCallback(
-    (event: MouseEvent | TouchEvent) => {
+  const handleGrabMove = useCallback((event: MouseEvent | TouchEvent) => {
+    setState((draft) => {
       if (!container.current) {
         return;
       }
 
-      if (!isGrabbing) {
+      if (!draft.isGrabbing) {
         return;
       }
 
@@ -151,11 +182,10 @@ export default function useGrab(
       const x = clientX - container.current?.clientLeft;
       const y = clientY - container.current?.clientTop;
 
-      setCurrentGrabX(x);
-      setCurrentGrabY(y);
-    },
-    [isGrabbing],
-  );
+      draft.currentGrabX = x;
+      draft.currentGrabY = y;
+    });
+  }, []);
 
   useEffect(() => {
     container.current?.addEventListener("wheel", handleScroll);
@@ -187,7 +217,7 @@ export default function useGrab(
       document.removeEventListener("mousemove", handleGrabMove);
       document.removeEventListener("touchmove", handleGrabMove);
     };
-  }, [handleScroll, handleGrabStart, handleGrabStop, handleGrabMove]);
+  }, [handleGrabStart, handleGrabStop, handleGrabMove]);
 
   useEffect(() => {
     document.body.style.cursor = isGrabbing ? "grabbing" : "default";
