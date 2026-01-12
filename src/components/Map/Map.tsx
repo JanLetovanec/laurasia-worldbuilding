@@ -17,7 +17,9 @@ export default function Map({ children, className }: MapProps) {
 
   return (
     <div className={clsx(className, css.map)} style={{ cursor }} ref={ref}>
-      <div style={{ transform }}>{children}</div>
+      <div style={{ transform }} className={css.transform}>
+        {children}
+      </div>
     </div>
   );
 }
