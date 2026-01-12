@@ -1,0 +1,9 @@
+---
+import BaseMap from "../images/base_map.svg";
+import { Image } from "astro:assets";
+import Map from "./Map/Map.tsx";
+---
+
+<Map client:only="react">
+  <Image src={BaseMap} alt="World map" />
+</Map>
