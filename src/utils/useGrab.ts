@@ -84,8 +84,10 @@ export default function useGrab(
           return;
         }
 
-        const mouseX = event.clientX - container.current.clientLeft;
-        const mouseY = event.clientY - container.current.clientTop;
+        const boundingRect = container.current.getBoundingClientRect();
+
+        const mouseX = event.pageX - boundingRect.x;
+        const mouseY = event.pageY - boundingRect.y;
 
         const centreX =
           container.current.clientLeft +
